@@ -1,6 +1,5 @@
 // User Model schema
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs';
 
 const UserSchema = new mongoose.Schema(
     {
@@ -31,12 +30,7 @@ const UserSchema = new mongoose.Schema(
             required: [true, "Phone number is required"],
             trim: true
         },
-        password: {
-            type: String,
-            required: [true, "Password is required"],
-            minlength: 8,
-            select: false
-        },
+
         profileImage: {
             type: String,
             default: ""
@@ -91,18 +85,7 @@ const UserSchema = new mongoose.Schema(
         lastLogin: {
             type: Date
         },
-        refreshToken: {
-            type: String,
-            default: "",
-            select: false
-        },
-        passwordResetToken: {
-            type: String,
-            default: ""
-        },
-        passwordResetExpire: {
-            type: Date
-        },
+
         isDeleted: {
             type: Boolean,
             default: false
@@ -112,15 +95,6 @@ const UserSchema = new mongoose.Schema(
     }
 );
 
-// Encrypt password before save
-UserSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) return next();
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-});
 
-UserSchema.methods.matchPassword = async function (enteredPassword) {
-    return await bcrypt.compare(enteredPassword, this.password);
-};
 
 export default mongoose.model('User', UserSchema);

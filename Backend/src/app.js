@@ -1,10 +1,7 @@
 // Express application configurations
 import express from "express"
 import cors from 'cors'
-import { errorHandler } from "./middlewares/errorHandler.js"
-import authRoutes from './modules/auth/auth.routes.js';
-
-app.use('/api/auth', authRoutes);
+import { errorHandler } from "./middleware/errorHandler.js"
 
 const app = express();
 
