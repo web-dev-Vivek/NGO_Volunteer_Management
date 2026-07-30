@@ -29,3 +29,68 @@ export const login = async (req, res, next) => {
         next(error);
     }
 };
+
+
+
+// Get current logged-in user
+export const getMe = async (req, res, next) => {
+    try {
+        res.status(200).json({
+            success: true,
+            data: req.user
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
+// Update Profile
+export const updateProfile = async (req, res, next) => {
+    try {
+
+        const {
+            firstName,
+            lastName,
+            email,
+            phone,
+            bio,
+            skills,
+            availability,
+            organization,
+            experience,
+        } = req.body;
+
+
+        const user = await User.findById(req.user._id);
+
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found",
+            });
+        }
+
+        user.firstName = firstName ?? user.firstName;
+        user.lastName = lastName ?? user.lastName;
+        user.email = email ?? user.email;
+        user.phone = phone ?? user.phone;
+        user.bio = bio ?? user.bio;
+        user.skills = skills ?? user.skills;
+        user.availability = availability ?? user.availability;
+        user.organization = organization ?? user.organization;
+        user.experience = experience ?? user.experience;
+
+        await user.save();
+
+
+        res.status(200).json({
+            success: true,
+            message: "Profile updated successfully",
+            data: user,
+        });
+
+    } catch (error) {
+        next(error);
+    }
+};
