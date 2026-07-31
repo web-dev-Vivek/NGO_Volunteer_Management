@@ -1,6 +1,8 @@
 // Authentication controllers
 import User from '../../models/User.js';
 import jwt from 'jsonwebtoken';
+import { uploadToCloudinary,deleteFromCloudinary } from '../../utils/cloudinaryupload.js';
+
 
 export const register = async (req, res, next) => {
     try {
@@ -94,3 +96,38 @@ export const updateProfile = async (req, res, next) => {
         next(error);
     }
 };
+
+
+// Upload Avatar
+  export const uploadAvatar = async (req, res, next) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'No file uploaded' });
+        }  
+        const user = await User.findById(req.user._id);
+
+         if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        
+        if(user.profileImagePublicId){
+            await deleteFromCloudinary(user.profileImagePublicId);
+        }
+        const   result =  await uploadToCloudinary(req.file.buffer,   "ngo-volunteer-management/avatars");
+        
+       
+       
+        user.profileImage = result.secure_url;
+        user.profileImagePublicId = result.public_id;
+
+        await user.save();
+
+        res.status(200).json({
+            success: true,
+            message: "profile image  uploaded successfully",
+            data: user,
+        });
+
+    }catch (error) {
+        next(error);
+    }}
