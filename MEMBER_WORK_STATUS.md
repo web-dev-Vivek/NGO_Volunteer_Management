@@ -12,9 +12,9 @@ This document tracks the completed and incomplete tasks for each team member bas
 - **Express & Server Setup**: Initialized Node.js environment, package dependencies, Express application instance in `app.js`, and `server.js` startup server logic.
 - **Database Connection Config**: Configured MongoDB connection utility in `config/db.js` supporting environment URI configuration.
 - **Error Handling Middleware**: Created custom global error-boundary middleware in `middleware/errorHandler.js` to prevent application crashes and output structured JSON errors.
+- **Multer Middleware Integration**: Create file upload middleware to save campaign banners and completion certificates.
 
 ### ❌ Incomplete Tasks
-- **Multer Middleware Integration**: Create file upload middleware to save campaign banners and completion certificates.
 - **Notification Records System**: Design `Notification` model, controllers to register triggers on activity status, and endpoints to view/mark-read notifications.
 - **Global System Analytics API**: Create endpoint logic to query counts and summaries of active campaigns, task allocations, and issued certificate counts.
 - **DevOps / Environment Settings**: final `.env` production setups and deployment check verification.
