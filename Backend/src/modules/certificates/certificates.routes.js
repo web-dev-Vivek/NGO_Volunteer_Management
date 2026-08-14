@@ -1,9 +1,11 @@
 import express from "express";
 import { protect } from "../../middleware/auth.js";
 import { authorize } from "../../middleware/authorize.js";
-import { downloadCertificate, generateCertificate, getAllCertificates, getCertificateStats, getMyCertificates, revokeCertificate, verifyCertificate } from "./certificates.controller.js";
+import { uploadCertificate } from "../../config/storage.js";
+import { downloadCertificate, generateCertificate, getAllCertificates, getCertificateStats, getMyCertificates, revokeCertificate, uploadCertificateController, verifyCertificate } from "./certificates.controller.js";
 
 const router = express.Router();
+router.post("/upload", uploadCertificate, uploadCertificateController);
 router.get("/verify/:hash", verifyCertificate);
 router.get("/my-certificates", protect, getMyCertificates);
 router.get("/stats", protect, authorize("admin"), getCertificateStats);
