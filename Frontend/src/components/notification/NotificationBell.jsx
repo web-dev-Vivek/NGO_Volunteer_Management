@@ -1,42 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { FiBell } from "react-icons/fi";
-
 import NotificationBadge from "./NotificationBadge";
 import NotificationDropdown from "./NotificationDropdown";
-
-const NotificationBell = ({ notifications, unreadCount, loading, onNotificationClick, onMarkAllRead }) => {
-  const [open, setOpen] = useState(false);
-  const wrapperRef = useRef(null);
-
-  useEffect(() => {
-    const closeOnOutsideClick = (event) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) setOpen(false);
-    };
-    const closeOnEscape = (event) => event.key === "Escape" && setOpen(false);
-
-    document.addEventListener("mousedown", closeOnOutsideClick);
-    document.addEventListener("keydown", closeOnEscape);
-    return () => {
-      document.removeEventListener("mousedown", closeOnOutsideClick);
-      document.removeEventListener("keydown", closeOnEscape);
-    };
-  }, []);
-
-  return (
-    <div className="notification-bell" ref={wrapperRef}>
-      <button
-        type="button"
-        className="notification-bell__button"
-        aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ""}`}
-        aria-expanded={open}
-        onClick={() => setOpen((value) => !value)}
-      >
-        <FiBell aria-hidden="true" />
-        <NotificationBadge count={unreadCount} />
-      </button>
-      {open && <NotificationDropdown notifications={notifications} unreadCount={unreadCount} loading={loading} onNotificationClick={(notification) => { onNotificationClick(notification); setOpen(false); }} onMarkAllRead={onMarkAllRead} />}
-    </div>
-  );
-};
-
+const NotificationBell = ({ notifications, unreadCount, loading, onNotificationClick, onMarkAllRead }) => { const [open, setOpen] = useState(false); const wrapperRef = useRef(null); useEffect(() => { const close = (event) => { if (wrapperRef.current && !wrapperRef.current.contains(event.target)) setOpen(false); }; const escape = (event) => event.key === "Escape" && setOpen(false); document.addEventListener("mousedown", close); document.addEventListener("keydown", escape); return () => { document.removeEventListener("mousedown", close); document.removeEventListener("keydown", escape); }; }, []); return <div className="relative" ref={wrapperRef}><button type="button" className="relative grid size-10 place-items-center rounded-lg border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:bg-slate-50 focus:ring-2 focus:ring-blue-500 focus:outline-none" aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ""}`} aria-expanded={open} onClick={() => setOpen((value) => !value)}><FiBell /><NotificationBadge count={unreadCount} /></button>{open && <NotificationDropdown notifications={notifications} unreadCount={unreadCount} loading={loading} onNotificationClick={(notification) => { onNotificationClick(notification); setOpen(false); }} onMarkAllRead={onMarkAllRead} />}</div>; };
 export default NotificationBell;
