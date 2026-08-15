@@ -41,15 +41,11 @@ const CertificateSchema = new mongoose.Schema(
             required: true,
             unique: true
         },
-        qrCode: {
-            type: String,
-            default: ""
-        },
-        verificationUrl: {
-            type: String,
-            default: ""
-        },
-        certificateFile: {
+       qrCode:{
+    type:String,
+    default:""
+},
+        certificateUrl: {
             type: String,
             required: true
         },
@@ -58,6 +54,10 @@ const CertificateSchema = new mongoose.Schema(
             ref: "User",
             required: true
         },
+        issuedFor:{
+    type:String,
+    required:true
+},
         status: {
             type: String,
             enum: ["valid", "revoked"],
@@ -74,13 +74,42 @@ const CertificateSchema = new mongoose.Schema(
             type: String,
             default: ""
         },
-        isDeleted: {
-            type: Boolean,
-            default: false
-        },
-        createdAt: { type: Date },
-        updatedAt: { type: Date }
-    }
+        isDeleted:{
+    type:Boolean,
+    default:false,
+    select:false
+},
+
+    },
+     {
+      timestamps:true
+   }
 )
 
+
+CertificateSchema.index({
+    volunteerId:1
+});
+
+CertificateSchema.index({
+    certificateHash:1
+});
+CertificateSchema.index({
+    issuedBy: 1
+});
+
+CertificateSchema.index({
+    certificateNumber:1
+});
+
+
+CertificateSchema.index(
+    {
+        volunteerId:1,
+        campaignId:1
+    },
+    {
+        unique:true
+    }
+);
 export default mongoose.model("Certificate", CertificateSchema)
